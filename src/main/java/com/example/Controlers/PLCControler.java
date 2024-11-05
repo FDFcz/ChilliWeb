@@ -16,6 +16,7 @@ public class PLCControler
     private List<Integer> keysToRemove = new ArrayList<>();
     private List<Teracota> teracotasToAdd= new ArrayList<>();
     private Thread PLCMesagingThread;
+    private int lastHour =-1;
 
     public PLCControler()
     {
@@ -39,9 +40,9 @@ public class PLCControler
         keysToRemove.add(teracotaID);
         lock.unlock();
     }
-    public void updateCron(int teracotaID)
+    public void updateCron(int teracotaID,int actuahour)
     {
-        teraccotaControlers.get(teracotaID).updateCron(LocalTime.now().getHour());
+        teraccotaControlers.get(teracotaID).updateCron(actuahour);
     }
     public Teracota getActualValues(int teracotaID)
     {
@@ -56,6 +57,17 @@ public class PLCControler
         while (true)
         {
             ReentrantLock lock = new ReentrantLock();
+            lock.lock();
+            int currentHour = LocalTime.now().getHour();
+            if(lastHour != currentHour)
+            {
+                for(Teracota teracota : teracotasToAdd)
+                {
+                    updateCron(teracota.getId(),currentHour);
+                }
+                lastHour = currentHour;
+            }
+            lock.unlock();
             lock.lock();
             for(Teracota teracota : teracotasToAdd)
             {

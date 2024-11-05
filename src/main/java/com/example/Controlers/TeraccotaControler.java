@@ -6,6 +6,7 @@ import com.example.Structures.PLC;
 import com.example.Structures.Schedule;
 import com.example.Structures.Teracota;
 
+import java.io.IOException;
 import java.time.LocalTime;
 
 public class TeraccotaControler {
@@ -14,6 +15,7 @@ public class TeraccotaControler {
     private Teracota teracota;
     private PLC plc;
     private UDPSender sender;
+    PhotoController photoControler;
 
     public TeraccotaControler(Teracota teracota)
     {
@@ -21,10 +23,18 @@ public class TeraccotaControler {
         plc = ChiliPeperApplication.getPLC(teracota.getId());
         sender = new UDPSender(plc.getIp(),8888);
         updateCron(LocalTime.now().getHour());
+        photoControler = new PhotoController();
     }
 
     public byte[] updateData()
     {
+        try {
+            String currentPath = new java.io.File(".").getCanonicalPath();
+            System.out.println("Current dir:" + currentPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        photoControler.takeSnapshot("C:\\projects\\java\\ChilliWeb\\src\\main\\RusberriPI");
         try {
             byte offset = 0;
             byte[] data = new byte[4];
