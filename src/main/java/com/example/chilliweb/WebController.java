@@ -2,6 +2,7 @@ package com.example.chilliweb;
 
 import com.example.Controlers.AuthorizationControler;
 import com.example.Controlers.ChiliPeperApplication;
+import com.example.Controlers.DatabaseControler;
 import com.example.Structures.Cron;
 import com.example.Structures.Customer;
 import com.example.Structures.Schedule;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -48,13 +50,13 @@ public class WebController {
 
         return "404";
     }
-
      */
 
     @GetMapping("/test")
     public String testwiev(){
         return "test2";
     }
+
 
     @GetMapping("/")
     public String toHome(){
@@ -246,9 +248,28 @@ public class WebController {
     @GetMapping("/teracotaGallery")
     public String Gallery(@RequestParam String id,
                              @RequestParam String teracota,
-                             @CookieValue("UserToken") String userToken)
+                             @RequestParam(required = false) String n,
+                             @CookieValue("UserToken") String userToken,Model model)
     {
         if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:403";
+        String userDir;
+        if(System.getProperty("os.name").startsWith("Windows")) userDir = "C:";
+        else userDir = userDir = "~";
+        String userName= ChiliPeperApplication.getUser(Integer.valueOf(id)).getUserName();
+        int count =5;
+        if(n!=null) count = Integer.parseInt(n);
+        List<String> photos = ChiliPeperApplication.getPictures(teracota,count);
+        /*
+        photos.add(userDir+"/"+userName+"/"+teracota+"/2024-10-10.jpg");
+        photos.add("images/chiliLogo.jpg");
+        photos.add("images/chiliLogo.jpg");
+        photos.add("images/chiliLogo.jpg");
+        photos.add("images/chiliLogo.jpg");
+         */
+        model.addAttribute("photos",photos);
+        model.addAttribute("id",id);
+        model.addAttribute("teracota",teracota);
+        model.addAttribute("n",count);
         return "user/gallery";
     }
     @GetMapping("/ChangeCronNumber")

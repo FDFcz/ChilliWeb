@@ -2,6 +2,8 @@ package com.example.Controlers;
 
 import com.example.Structures.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -9,6 +11,7 @@ public class ChiliPeperApplication {
 	private static DatabaseControler dbControler ;
 	private static AuthorizationControler aControler = new AuthorizationControler();
 	private static PLCControler plcControler;
+	private static PhotoController photoController = new PhotoController();
 
 	public static void run() {
 			dbControler = new DatabaseControler();
@@ -42,7 +45,11 @@ public class ChiliPeperApplication {
 	public static void addTeracota(Customer user, Teracota teracota)
 	{
 		Teracota newTera = dbControler.addTeracota(user.getId(), teracota.getName(),teracota.getPlantID());
-		if(newTera != null) plcControler.addTeracota(newTera);
+		if(newTera != null)
+		{
+			plcControler.addTeracota(newTera);
+			photoController.createPhotoDir(""+newTera.getId());
+		}
 	}
 	public static Teracota getTeracota(int teraID) {return plcControler.getActualValues(teraID);}
 	public static Teracota getTeracotaFromDatabese(int teraID){ return dbControler.getTeracota(teraID);}
@@ -72,4 +79,17 @@ public class ChiliPeperApplication {
 
 	public static PLC getPLC(int teracotaID){return dbControler.getPLC(teracotaID);}
 	public static Schedule getSchedule(int scheduleID){return dbControler.getSchedule(scheduleID);}
+
+	public static boolean takeSnap(int teracottaID)
+	{
+		LocalDateTime date = LocalDateTime.now();
+		String teracotaFolder = "\\"+teracottaID;
+		String fileName = date.getYear()+"-"+date.getMonthValue()+"-"+date.getDayOfMonth()+".jpg";
+		photoController.takeSnapshot(teracotaFolder,fileName);
+		return true;
+	}
+	public static ArrayList<String> getPictures(String teracotaPath,int n)
+	{
+		return photoController.getPhotos(teracotaPath,n);
+	}
 }

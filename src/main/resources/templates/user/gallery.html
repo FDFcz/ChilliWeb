@@ -3,14 +3,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <title>Teracota Gallery</title>
-    <link rel="icon" href="../static/images/chiliLogo.jpg" type="image/icon">
+    <link rel="icon" href="images/chiliLogo.jpg" type="image/icon">
     <link href="css/Chilli.css" rel="Stylesheet">
 </head>
 <body>
-<H1></H1>
 <main>
-    <img src="../static/images/Chily.png">
-    <img src="../static/images/Chily.png">
+    <div class="galery" >
+    <img th:each="photo, iterStat : ${photos}" th:src="${iterStat.current}" alt="photo">
+    </div>
 </main>
+<footer><form>
+    <a th:href="@{ToUserHome(id=${id})}">Domů</a>
+    <input type="hidden" name="id" th:value="${id}">
+    <input type="hidden" name="teracota" th:value="${teracota}">
+    <label for="n">počet obrázků:</label><input name="n" id="n" type="text" th:value="${n}"><input type="submit" value="aktualizuj">
+</form></footer>
 </body>
 </html>

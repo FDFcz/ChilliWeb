@@ -7,7 +7,9 @@ import com.example.Structures.Schedule;
 import com.example.Structures.Teracota;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
 
 public class TeraccotaControler {
 
@@ -28,13 +30,8 @@ public class TeraccotaControler {
 
     public byte[] updateData()
     {
-        try {
-            String currentPath = new java.io.File(".").getCanonicalPath();
-            System.out.println("Current dir:" + currentPath);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        photoControler.takeSnapshot("C:\\projects\\java\\ChilliWeb\\src\\main\\RusberriPI");
+
+        ChiliPeperApplication.takeSnap(teracota.getId());
         try {
             byte offset = 0;
             byte[] data = new byte[4];
