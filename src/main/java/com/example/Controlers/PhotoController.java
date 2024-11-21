@@ -7,23 +7,31 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class PhotoController {
-
     String currentPath;
     String scriptPath;
     String galerryPath;
+    boolean isLinux;
     public PhotoController()
     {
+        isLinux = !System.getProperty("os.name").toLowerCase().contains("windows");
+
+        Path currentRelativePath = Paths.get("");
+        String s = currentRelativePath.toAbsolutePath().toString();
+        System.out.println(s);
         try {
             currentPath = new java.io.File(".").getCanonicalPath();
             System.out.println("Current dir:" + currentPath);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        galerryPath = currentPath+"\\src\\main\\resources\\static\\images\\gallery";
-        scriptPath = currentPath + "\\src\\main\\RusberriPI\\snap.sh";
+        if(isLinux) galerryPath = "\\var\\gallery";
+        else galerryPath = "C:\\var\\gallery";
+        scriptPath = "\\home\\Chilli\\Desktop\\snap.sh";
     }
     public boolean takeSnapshot(String teracotaFolder,String fileName) {
 
@@ -31,14 +39,8 @@ public class PhotoController {
         teracotaFolder = galerryPath+teracotaFolder;
         String outputFilePath = teracotaFolder+"\\"+fileName;
 
-        // Ensure paths are logged for debugging
-        /*
-        System.out.println("Script Path: " + scriptPath);
-        System.out.println("Output Path: " + outPutPath);
-        System.out.println("Output File Path: " + outputFilePath);
-         */
         try {
-            if(System.getProperty("os.name").toLowerCase().contains("windows")) {
+            if(!isLinux) {
                 // Create a simple placeholder image
                 int width = 100; // Width of the image
                 int height = 100; // Height of the image
@@ -60,33 +62,33 @@ public class PhotoController {
             }
             else {
 
-                    // Build the command
-                    ProcessBuilder processBuilder = new ProcessBuilder(
-                            "bash", scriptPath, outputFilePath
-                    );
-                    processBuilder.redirectErrorStream(true); // Combine standard output and error streams
+                // Build the command
+                ProcessBuilder processBuilder = new ProcessBuilder(
+                        "bash", scriptPath, outputFilePath
+                );
+                processBuilder.redirectErrorStream(true); // Combine standard output and error streams
 
-                    // Start the process
-                    Process process = processBuilder.start();
+                // Start the process
+                Process process = processBuilder.start();
 
-                    // Capture and print the output
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        System.out.println(line);
-                    }
-
-                    // Wait for the process to complete and get the exit code
-                    int exitCode = process.waitFor();
-                    System.out.println("Exit Code: " + exitCode);
-
-                    // Return true if the script succeeded, false otherwise
-                    return exitCode == 0;
+                // Capture and print the output
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false; // Return false on exception
+
+                // Wait for the process to complete and get the exit code
+                int exitCode = process.waitFor();
+                System.out.println("Exit Code: " + exitCode);
+
+                // Return true if the script succeeded, false otherwise
+                return exitCode == 0;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false; // Return false on exception
+        }
     }
 
     public ArrayList<String> getPhotos(String terracotaFolder, int n)
@@ -97,7 +99,7 @@ public class PhotoController {
         File[] listOfFiles = folder.listFiles();
         if(listOfFiles != null) {
             for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) fileNames.add("images/gallery/"+terracotaFolder+"/"+listOfFiles[i].getName());
+                if (listOfFiles[i].isFile()) fileNames.add("gallery/"+terracotaFolder+"/"+listOfFiles[i].getName());
                 if(fileNames.size() >=n)break; // return only specific number of n
             }
         }

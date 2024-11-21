@@ -6,10 +6,7 @@ import com.example.Structures.PLC;
 import com.example.Structures.Schedule;
 import com.example.Structures.Teracota;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
 
 public class TeraccotaControler {
 
@@ -17,7 +14,6 @@ public class TeraccotaControler {
     private Teracota teracota;
     private PLC plc;
     private UDPSender sender;
-    PhotoController photoControler;
 
     public TeraccotaControler(Teracota teracota)
     {
@@ -25,7 +21,6 @@ public class TeraccotaControler {
         plc = ChiliPeperApplication.getPLC(teracota.getId());
         sender = new UDPSender(plc.getIp(),8888);
         updateCron(LocalTime.now().getHour());
-        photoControler = new PhotoController();
     }
 
     public byte[] updateData()

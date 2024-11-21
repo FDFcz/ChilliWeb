@@ -24,12 +24,13 @@
     <!-- Tabulka květináčů -->
     <table border="1">
         <tr>
-            <th colspan="3">Květináče</th>
+            <th colspan="4">Květináče</th>
         </tr>
         <tr>
             <th width="20%">Jméno květináče:</th>
             <th width="15%">Stav růstu:</th>
             <th>Detaily:</th>
+            <th>Galerie:</th>
         </tr>
 
         <!-- Smyčka přes seznam květináčů uživatele -->
@@ -40,6 +41,7 @@
                 <span class="dayToGrow" th:text="${teracota.growDays}">Dny růstu</span>
             </td>
             <td><a th:href="@{/teracotaDetail(id=${userID}, teracota=${teracota.id})}">Detail</a></td>
+            <td><a th:href="@{teracotaGallery(id=${userID}, teracota=${teracota.id})}">Galerie</a></td>
         </tr>
     </table>
 
@@ -53,7 +55,6 @@
     <img src="images/Chily.png" alt="Chily logo">
 </main>
 
-<aside>a</aside>
 
 <!-- Odkaz na odhlášení -->
 <footer>

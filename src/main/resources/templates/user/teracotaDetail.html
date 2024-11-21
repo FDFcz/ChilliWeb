@@ -19,7 +19,6 @@
         humidity: <span th:text="${currentTeracota.actualHumidity}"></span>%<br>
         light: <span th:text="${currentTeracota.actuallight} ? 'ON' : 'OFF'"></span>
     </p>
-    <a th:href="@{teracotaGallery(id=${userID}, teracota=${currentTeracota.id})}">Gallery</a>
     <hr>
 
     <form class="container" method="post">

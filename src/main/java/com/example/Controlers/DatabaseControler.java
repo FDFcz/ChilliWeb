@@ -18,7 +18,7 @@ public class DatabaseControler {
         //dataSource = createSource();
         try(Connection connection = getConection())
         {
-            System.out.println("sucess");
+            System.out.println("Database is conected.");
             return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);

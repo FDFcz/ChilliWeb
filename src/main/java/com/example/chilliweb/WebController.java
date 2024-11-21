@@ -8,13 +8,11 @@ import com.example.Structures.Customer;
 import com.example.Structures.Schedule;
 import com.example.Structures.Teracota;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +36,7 @@ public class WebController {
         authorizationControler = new AuthorizationControler();
         rnd = new Random(new Date().getTime());
     }
-    /*
+/*
     @RequestMapping("/**")
     public String notFound(HttpServletRequest request) {
         String requestURL = request.getRequestURL().toString();
@@ -50,27 +48,14 @@ public class WebController {
 
         return "404";
     }
-     */
-
-    @GetMapping("/test")
-    public String testwiev(){
-        return "test2";
-    }
-
-
+ */
     @GetMapping("/")
     public String toHome(){
         return "about/index";
-        //return "test";
     }
     @GetMapping("/403")
     public String to403(){
         return "403";
-    }
-    @GetMapping("/ViewTables")
-    //@ResponseBody
-    public String ViewTables(){
-        return "ViewTables";
     }
 //region [customer]
     @GetMapping("/registry")
@@ -189,7 +174,6 @@ public class WebController {
             @RequestParam(required = false) String plantType,
             @CookieValue("UserToken") String userToken)
     {
-        System.out.println(id);
         if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:login";
         Teracota newTeracota = new Teracota(name, Teracota.PlantTypes.valueOf(plantType));
         Customer currentUser = ChiliPeperApplication.getUser(Integer.valueOf(id));
@@ -252,20 +236,11 @@ public class WebController {
                              @CookieValue("UserToken") String userToken,Model model)
     {
         if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:403";
-        String userDir;
-        if(System.getProperty("os.name").startsWith("Windows")) userDir = "C:";
-        else userDir = userDir = "~";
-        String userName= ChiliPeperApplication.getUser(Integer.valueOf(id)).getUserName();
+        if(!authorizationControler.isCustomerOwnerOfTeracota(Integer.valueOf(id),Integer.valueOf(teracota))) return "redirect:403";
         int count =5;
         if(n!=null) count = Integer.parseInt(n);
         List<String> photos = ChiliPeperApplication.getPictures(teracota,count);
-        /*
-        photos.add(userDir+"/"+userName+"/"+teracota+"/2024-10-10.jpg");
-        photos.add("images/chiliLogo.jpg");
-        photos.add("images/chiliLogo.jpg");
-        photos.add("images/chiliLogo.jpg");
-        photos.add("images/chiliLogo.jpg");
-         */
+
         model.addAttribute("photos",photos);
         model.addAttribute("id",id);
         model.addAttribute("teracota",teracota);
@@ -312,5 +287,15 @@ public class WebController {
     public String priceList()
     {
         return "about/priceList";
+    }
+    @GetMapping("/support")
+    public String support()
+    {
+        return "about/support";
+    }
+    @PostMapping("/support")
+    public String postSupport()
+    {
+        return "about/index";
     }
 }
