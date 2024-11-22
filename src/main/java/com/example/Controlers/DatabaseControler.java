@@ -30,13 +30,15 @@ public class DatabaseControler {
         return DriverManager.getConnection("jdbc:mariadb://localhost:3306/chilly", "ChilliUser", "Chilli321");
     }
 
-    public int registryNewUser(String name, String password)
+    public int registryNewUser(String name, String password,String email,String phone)
     {
         try(Connection connection = getConection())
         {
-            PreparedStatement ps = connection.prepareStatement("insert into customer (username,password)  VALUES (?,?)");
+            PreparedStatement ps = connection.prepareStatement("insert into customer (username,password,email,tell)  VALUES (?,?,?,?)");
             ps.setString(1, name);
             ps.setString(2, password);
+            ps.setString(3, email);
+            ps.setString(4, phone);
             int result = ps.executeUpdate();
             return getUserID(name);
         } catch (SQLException e) {
@@ -172,7 +174,7 @@ public class DatabaseControler {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM customer WHERE customer_id = ?");
             ps.setString(1, String.valueOf(userID));
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) return new Customer(userID,rs.getString("username"));
+            if(rs.next()) return new Customer(userID,rs.getString("username"),rs.getString("email"),rs.getString("tell"));
             return null;
         }
         catch (Exception e) {
@@ -186,7 +188,7 @@ public class DatabaseControler {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM customer WHERE customer_id = ?");
             ps.setString(1, String.valueOf(userID));
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) retUser = new Customer(userID,rs.getString("username"));
+            if(rs.next()) retUser = new Customer(userID,rs.getString("username"),rs.getString("email"),rs.getString("tell"));
             else return null;
             ps = connection.prepareStatement("SELECT * FROM terracotta WHERE owner = ?");
             ps.setInt(1,userID);
@@ -449,7 +451,7 @@ public class DatabaseControler {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM planttype WHERE plantType_id = ?");
             ps.setString(1, String.valueOf(plantID));
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) return new Plant(Teracota.PlantTypes.values()[plantID],Integer.valueOf(rs.getInt("growtimeindays")));
+            if(rs.next()) return new Plant(Teracota.PlantTypes.values()[plantID],rs.getInt("growtimeindays"),rs.getInt("price"));
             return null;
         }
         catch (Exception e) {

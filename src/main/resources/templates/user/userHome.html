@@ -60,7 +60,7 @@
 <footer>
     Jste přihlášen jako: <span th:text="${userName}">Uživatel</span>
     <strong></strong>
-    <a th:href="@{/profile}">Zobrazit profil</a>
+    <a th:href="@{/profile(id=${userID})}">Zobrazit profil</a>
     <strong></strong>
     <a th:href="@{/logOut(id=${userID})}">Odhlásit se</a>
 </footer>

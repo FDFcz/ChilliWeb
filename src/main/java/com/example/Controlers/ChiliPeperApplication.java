@@ -65,7 +65,7 @@ public class ChiliPeperApplication {
 	public static int getUserID(String userName) {return dbControler.getUserID(userName);}
 	public static Customer getUser(int id) {return dbControler.getUser(id);}
 	public static Customer getUserWithTeracotas(int id) {return dbControler.getUserWithTeracotas(id);}
-	public static int registryNewUser(String userName, String password) {return dbControler.registryNewUser(userName, aControler.getHash(password));}
+	public static int registryNewUser(String userName, String password,String email,String tell) {return dbControler.registryNewUser(userName, aControler.getHash(password),email,tell);}
 	//endregion
 
 	//region [Cron]
@@ -85,6 +85,13 @@ public class ChiliPeperApplication {
 		LocalDateTime date = LocalDateTime.now();
 		String teracotaFolder = "\\"+teracottaID;
 		String fileName = date.getYear()+"-"+date.getMonthValue()+"-"+date.getDayOfMonth()+".jpg";
+		photoController.takeSnapshot(teracotaFolder,fileName);
+		return true;
+	}
+	public static boolean takeActualSnap(int teracottaID)
+	{
+		String teracotaFolder = "\\"+teracottaID+"\\custom";
+		String fileName = "temp.jpg";
 		photoController.takeSnapshot(teracotaFolder,fileName);
 		return true;
 	}

@@ -9,7 +9,8 @@ public class Teracota
     public static enum PlantTypes {
         Jalapenos,
         Poblano,
-        Habareno
+        Habareno,
+        Numex_Twilight,
     }
     private int id;
     private String name;

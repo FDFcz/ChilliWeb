@@ -3,10 +3,8 @@ package com.example.chilliweb;
 import com.example.Controlers.AuthorizationControler;
 import com.example.Controlers.ChiliPeperApplication;
 import com.example.Controlers.DatabaseControler;
-import com.example.Structures.Cron;
-import com.example.Structures.Customer;
-import com.example.Structures.Schedule;
-import com.example.Structures.Teracota;
+import com.example.Structures.*;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -62,15 +60,17 @@ public class WebController {
     public String toRegistry(){return "registry";}
     @PostMapping("/registry")
     public String toRegistryAgain(
-            @RequestParam(required = false) String username,
-            @RequestParam(required = false) String password,
-            @RequestParam(required = false) String password2,
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam String tell,
+            @RequestParam String password,
+            @RequestParam String password2,
             Model model)
     {
         model.addAttribute("ERROR",1);
         if(ChiliPeperApplication.getUserID(username)!=-1) return "registry";
         if(!password.equals(password2)||password.equals("")) return "registry";
-        ChiliPeperApplication.registryNewUser(username, password);
+        ChiliPeperApplication.registryNewUser(username, password,email,tell);
         return "redirect:";
     }
     @GetMapping("/login")
@@ -255,6 +255,7 @@ public class WebController {
                              @CookieValue("UserToken") String userToken)
     {
         if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:403";
+        if(!authorizationControler.isCustomerOwnerOfTeracota(Integer.valueOf(id),Integer.valueOf(teracota))) return "redirect:403";
         if (method == null)
         {
             return "ChangeCron";
@@ -272,6 +273,16 @@ public class WebController {
 
         return "redirect:userHome?id="+id;
     }
+
+    @GetMapping("profile")
+    public String profile(@RequestParam String id, @CookieValue("UserToken") String userToken,Model model)
+    {
+        if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:403";
+        Customer thisCustomer = ChiliPeperApplication.getUser(Integer.valueOf(id));
+        model.addAttribute("customer",thisCustomer);
+        return "user/profile";
+    }
+
     //endregion
     @GetMapping("/about")
     public String about()
@@ -284,8 +295,14 @@ public class WebController {
         return "about/chilly";
     }
     @GetMapping("/priceList")
-    public String priceList()
+    public String priceList(Model model)
     {
+        List<Plant> plants = new ArrayList<>();
+        for (Teracota.PlantTypes pt: Teracota.PlantTypes.values())
+        {
+            plants.add(ChiliPeperApplication.getPlant(pt.ordinal()));
+        }
+        model.addAttribute("plants",plants);
         return "about/priceList";
     }
     @GetMapping("/support")

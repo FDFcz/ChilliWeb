@@ -100,7 +100,8 @@ DELETE FROM `planttype`;
 INSERT INTO `planttype` (`plantType_id`, `plantname`, `growtimeindays`, `pricePerMouth`) VALUES
 	(0, 'Jalapenos', 80, 200),
 	(1, 'Poblano', 75, 230),
-	(2, 'Habareno', 110, 280);
+	(2, 'Habareno', 110, 280),
+    (3,'Numex-Twilight',95,130);
 
 -- Exportování struktury pro tabulka chilly.plc
 CREATE TABLE IF NOT EXISTS `plc` (

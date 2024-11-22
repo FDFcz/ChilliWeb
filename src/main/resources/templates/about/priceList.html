@@ -24,7 +24,27 @@
     <h1>Cenník</h1>
     <p>Cenník se odvíjí od průměrné cenny elektrické energie za poseldní měsíc. A je orientační.</p>
     <p>Jednotlivé cenny budeme zaučtovávat každý měsíc, a to dle spotřeboavanné elektricé energie.</p>
-    
+
+    <table border="1">
+        <tr>
+            <th colspan="2">Aktuální cenník:</th>
+        </tr>
+        <tr>
+            <th width="20%">Rostlinka:</th>
+            <th width="15%">Cenna: (kč)</th>
+        </tr>
+
+        <!-- Smyčka přes seznam květináčů uživatele -->
+        <tr th:each="plant : ${plants}">
+            <td th:text="${plant.getPlantTypes().name()}">Jméno rostlinky</td>
+            <td class="persents">
+                <span th:text="${plant.getPrice()}">cenna:</span>
+            </td>
+        </tr>
+    </table>
+
+    <img src="images/Chily.png" alt="chilli logo">
+
 </main>
 <footer><strong>E-mail: </strong> <a href="email:podpora@hotcompany.com">podpora@hotcompany.com</a> <strong>Telefon: </strong><a href="tel:+420123456789">+420 123 456 789</a> <strong class="adress">Adresa:</strong> <span class="adress">Chili Pepper Lane 123, Město koření, PSČ 98765</span></footer>
 </body>

@@ -30,7 +30,7 @@ public class PhotoController {
             throw new RuntimeException(e);
         }
         if(isLinux) galerryPath = "\\var\\gallery";
-        else galerryPath = "C:\\var\\gallery";
+        else galerryPath = "C:\\gallery";
         scriptPath = "\\home\\Chilli\\Desktop\\snap.sh";
     }
     public boolean takeSnapshot(String teracotaFolder,String fileName) {
@@ -105,9 +105,17 @@ public class PhotoController {
         }
         return fileNames;
     }
+    public String getActualPhoto(String terracotaFolder)
+    {
+        return galerryPath+"\\"+terracotaFolder+"\\custom\\temp.jpg";
+    }
     public boolean createPhotoDir(String terracotaFolder)
     {
         File theDir = new File(galerryPath+"\\"+terracotaFolder);
+        if (!theDir.exists()){
+            theDir.mkdirs();
+        }
+        theDir = new File(galerryPath+"\\"+terracotaFolder+"\\custom");
         if (!theDir.exists()){
             theDir.mkdirs();
         }

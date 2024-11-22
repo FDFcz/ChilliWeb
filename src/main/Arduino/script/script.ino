@@ -128,7 +128,7 @@ void control()
   else outputsValues[2] = false;
 
   //Fan--------------
-  if (ActualCO2 > 1000 || ActualCO2 < 100) outputsValues[4] = false;
+  if (ActualCO2 > 1000 || ActualCO2 < 100) outputsValues[4] = true;
   else outputsValues[4] = false;
 
   
