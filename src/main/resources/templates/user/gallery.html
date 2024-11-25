@@ -16,6 +16,7 @@
     <a th:href="@{ToUserHome(id=${id})}">Domů</a>
     <input type="hidden" name="id" th:value="${id}">
     <input type="hidden" name="teracota" th:value="${teracota}">
+    <a th:href="@{actual(id=${id},teracota=${teracota})}" target="_blank">aktuální foto</a>
     <label for="n">počet obrázků:</label><input name="n" id="n" type="text" th:value="${n}"><input type="submit" value="aktualizuj">
 </form></footer>
 </body>

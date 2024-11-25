@@ -88,12 +88,12 @@ public class ChiliPeperApplication {
 		photoController.takeSnapshot(teracotaFolder,fileName);
 		return true;
 	}
-	public static boolean takeActualSnap(int teracottaID)
+	public static String takeActualSnap(int teracottaID)
 	{
 		String teracotaFolder = "\\"+teracottaID+"\\custom";
 		String fileName = "temp.jpg";
 		photoController.takeSnapshot(teracotaFolder,fileName);
-		return true;
+		return photoController.getActualPhoto(teracottaID);
 	}
 	public static ArrayList<String> getPictures(String teracotaPath,int n)
 	{

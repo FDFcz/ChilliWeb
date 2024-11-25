@@ -105,9 +105,9 @@ public class PhotoController {
         }
         return fileNames;
     }
-    public String getActualPhoto(String terracotaFolder)
+    public String getActualPhoto(int terracotaFolder)
     {
-        return galerryPath+"\\"+terracotaFolder+"\\custom\\temp.jpg";
+        return "gallery\\"+terracotaFolder+"\\custom\\temp.jpg";
     }
     public boolean createPhotoDir(String terracotaFolder)
     {

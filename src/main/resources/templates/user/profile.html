@@ -7,5 +7,18 @@
     <link href="css/Chilli.css" rel="Stylesheet">
 </head>
 <body>
-<main><h1 th:text="${customer.getName()}"></h1></main>
+<main>
+    <h1 th:text="${customer.getName()}"></h1>
+    <form>
+        <input type="hidden" id="id" name="id" th:value="${customer.getId()}">
+        <label for="email">email:</label>
+        <input type="text" id="email" name="email" required th:value="${customer.getEmail()}"><br><br>
+        <label for="tell">telefon:</label>
+        <input type="text" id="tell" name="tell" required th:value="${customer.getTel()}"><br><br>
+        <input type="submit" value="Aktualizovat údaje">
+
+    </form>
+    <a th:href="@{/ChangePassword(id=${customer.getId()})}">Změnit heslo</a>
+    <img src="images/Chily.png" alt="Chily logo">
+</main>
 </body>

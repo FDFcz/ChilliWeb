@@ -247,6 +247,16 @@ public class WebController {
         model.addAttribute("n",count);
         return "user/gallery";
     }
+    @GetMapping("/actual")
+    public String actual(@RequestParam String id, @RequestParam String teracota, @CookieValue("UserToken") String userToken, Model model)
+    {
+        if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:403";
+        if(!authorizationControler.isCustomerOwnerOfTeracota(Integer.valueOf(id),Integer.valueOf(teracota))) return "redirect:403";
+        model.addAttribute("id",id);
+        model.addAttribute("teracota",teracota);
+        model.addAttribute("picture",ChiliPeperApplication.takeActualSnap(Integer.valueOf(teracota)));
+        return "user/actualPhoto";
+    }
     @GetMapping("/ChangeCronNumber")
     public String ChangeCron(@RequestParam String id,
                              @RequestParam String teracota,
@@ -274,13 +284,19 @@ public class WebController {
         return "redirect:userHome?id="+id;
     }
 
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public String profile(@RequestParam String id, @CookieValue("UserToken") String userToken,Model model)
     {
         if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:403";
         Customer thisCustomer = ChiliPeperApplication.getUser(Integer.valueOf(id));
         model.addAttribute("customer",thisCustomer);
         return "user/profile";
+    }
+
+    @PostMapping("/profile")
+            public String postProfile(@RequestParam String id, @RequestParam String email, @RequestParam String  tell, @CookieValue("UserToken")Model model)
+    {
+        return "redirect:userHome?id="+id;
     }
 
     //endregion
