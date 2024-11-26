@@ -16,8 +16,8 @@
 
 
 -- Exportování struktury databáze pro
-CREATE DATABASE IF NOT EXISTS `chilly` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
-USE `chilly`;
+CREATE DATABASE IF NOT EXISTS `chillyWeb` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
+USE `chillyWeb`;
 
 -- Exportování struktury pro tabulka chilly.adress
 CREATE TABLE IF NOT EXISTS `adress` (
@@ -44,19 +44,17 @@ CREATE TABLE IF NOT EXISTS `cron` (
   KEY `Schedl` (`Schedl`),
   CONSTRAINT `FK_cron_schedule` FOREIGN KEY (`Schedl`) REFERENCES `schedule` (`schedule_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `FK_cron_terracotta` FOREIGN KEY (`tracota`) REFERENCES `terracotta` (`terracotta_id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=168 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Exportování dat pro tabulku chilly.cron: ~8 rows (přibližně)
+-- Exportování dat pro tabulku chilly.cron: ~6 rows (přibližně)
 DELETE FROM `cron`;
 INSERT INTO `cron` (`cron_id`, `tracota`, `Schedl`, `startTime`, `endTime`) VALUES
-	(133, 44, 133, 5, 23),
-	(134, 44, 134, 0, 5),
-	(139, 46, 139, 5, 23),
-	(140, 46, 140, 0, 5),
-	(141, 47, 141, 5, 23),
-	(142, 47, 142, 0, 5),
-	(143, 48, 143, 5, 23),
-	(144, 48, 144, 0, 5);
+	(145, 49, 145, 5, 23),
+	(146, 49, 146, 0, 5),
+	(154, 53, 154, 5, 23),
+	(155, 53, 155, 0, 5),
+	(166, 59, 166, 5, 23),
+	(167, 59, 167, 0, 5);
 
 -- Exportování struktury pro tabulka chilly.customer
 CREATE TABLE IF NOT EXISTS `customer` (
@@ -71,37 +69,30 @@ CREATE TABLE IF NOT EXISTS `customer` (
   PRIMARY KEY (`customer_id`),
   KEY `addressID` (`addressID`),
   CONSTRAINT `FK_customer_adress` FOREIGN KEY (`addressID`) REFERENCES `adress` (`adress_ID`) ON DELETE NO ACTION ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Exportování dat pro tabulku chilly.customer: ~1 rows (přibližně)
+-- Exportování dat pro tabulku chilly.customer: ~2 rows (přibližně)
 DELETE FROM `customer`;
 INSERT INTO `customer` (`customer_id`, `username`, `password`, `token`, `tokenExpiration`, `email`, `tell`, `addressID`) VALUES
-	(1, 'Filip', '8d23cf6c86e834a7aa6eded54c26ce2bb2e74903538c61bdd5d2197997ab2f72', 'e0eb8dfdfc88955d2fd1cd36d15ff1c91b281157139be7e4be63291f21eac19d', '2024-10-02 00:00:00', NULL, NULL, NULL);
-
--- Exportování struktury pro tabulka chilly.debugs
-CREATE TABLE IF NOT EXISTS `debugs` (
-  `log` char(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- Exportování dat pro tabulku chilly.debugs: ~0 rows (přibližně)
-DELETE FROM `debugs`;
+	(1, 'Filip', '8d23cf6c86e834a7aa6eded54c26ce2bb2e74903538c61bdd5d2197997ab2f72', 'a4af14020b1e4b54f6c25127a87b1c1d9b7cd02485eeeb4c36e3284a6c4f4a03', '2024-11-25 00:00:00', 'filip@mail', '66666666', NULL),
+	(2, 'Bakalar', '8d23cf6c86e834a7aa6eded54c26ce2bb2e74903538c61bdd5d2197997ab2f72', '8596b4396e5fa5ddac0b8cf8621631e4c73605a86dc8a9c7250b7c91ea42686f', '2024-11-23 00:00:00', 'Bakalar@UHK.cz', '777777777', NULL);
 
 -- Exportování struktury pro tabulka chilly.planttype
 CREATE TABLE IF NOT EXISTS `planttype` (
   `plantType_id` int(11) NOT NULL AUTO_INCREMENT,
   `plantname` varchar(50) DEFAULT NULL,
   `growtimeindays` int(11) DEFAULT NULL,
-  `pricePerMouth` int(11) DEFAULT NULL,
+  `actual_price` int(11) DEFAULT NULL,
   PRIMARY KEY (`plantType_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Exportování dat pro tabulku chilly.planttype: ~3 rows (přibližně)
+-- Exportování dat pro tabulku chilly.planttype: ~4 rows (přibližně)
 DELETE FROM `planttype`;
-INSERT INTO `planttype` (`plantType_id`, `plantname`, `growtimeindays`, `pricePerMouth`) VALUES
+INSERT INTO `planttype` (`plantType_id`, `plantname`, `growtimeindays`, `actual_price`) VALUES
 	(0, 'Jalapenos', 80, 200),
 	(1, 'Poblano', 75, 230),
 	(2, 'Habareno', 110, 280),
-    (3,'Numex-Twilight',95,130);
+	(3, 'numex-twilight', 90, 130);
 
 -- Exportování struktury pro tabulka chilly.plc
 CREATE TABLE IF NOT EXISTS `plc` (
@@ -126,19 +117,17 @@ CREATE TABLE IF NOT EXISTS `schedule` (
   `light` bit(1) DEFAULT NULL,
   `humidity` int(11) DEFAULT NULL,
   PRIMARY KEY (`schedule_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=168 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Exportování dat pro tabulku chilly.schedule: ~8 rows (přibližně)
+-- Exportování dat pro tabulku chilly.schedule: ~6 rows (přibližně)
 DELETE FROM `schedule`;
 INSERT INTO `schedule` (`schedule_id`, `temp`, `light`, `humidity`) VALUES
-	(133, 28, b'1', 50),
-	(134, 24, b'0', 40),
-	(139, 28, b'1', 50),
-	(140, 24, b'0', 40),
-	(141, 28, b'1', 50),
-	(142, 24, b'0', 40),
-	(143, 28, b'1', 50),
-	(144, 24, b'0', 40);
+	(145, 19.5, b'0', 70),
+	(146, 19.5, b'0', 70),
+	(154, 28, b'1', 50),
+	(155, 24, b'0', 40),
+	(166, 28, b'1', 50),
+	(167, 24, b'0', 40);
 
 -- Exportování struktury pro tabulka chilly.terracotta
 CREATE TABLE IF NOT EXISTS `terracotta` (
@@ -155,15 +144,14 @@ CREATE TABLE IF NOT EXISTS `terracotta` (
   CONSTRAINT `FK_terracotta_customer` FOREIGN KEY (`owner`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   CONSTRAINT `FK_terracotta_planttype` FOREIGN KEY (`plant`) REFERENCES `planttype` (`plantType_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_terracotta_plc` FOREIGN KEY (`PLC`) REFERENCES `plc` (`PLC_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Exportování dat pro tabulku chilly.terracotta: ~4 rows (přibližně)
+-- Exportování dat pro tabulku chilly.terracotta: ~2 rows (přibližně)
 DELETE FROM `terracotta`;
 INSERT INTO `terracotta` (`terracotta_id`, `name`, `owner`, `PLC`, `plant`, `planted_at`) VALUES
-	(44, '', 1, 1, 0, '2024-09-28 22:00:00'),
-	(46, 'jknb', 1, 1, 1, '2024-09-29 22:00:00'),
-	(47, '', 1, 1, 2, '2024-09-29 22:00:00'),
-	(48, 'jknb', 1, 1, 0, '2024-09-29 22:00:00');
+	(49, 'Real_PLC', 1, 1, 0, '2024-10-05 22:00:00'),
+	(53, 'he', 1, 1, 0, '2024-10-19 22:00:00'),
+	(59, 'ahoj', 1, 1, 0, '2024-11-22 23:00:00');
 
 -- Exportování struktury pro trigger chilly.cron_after_delete
 SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';

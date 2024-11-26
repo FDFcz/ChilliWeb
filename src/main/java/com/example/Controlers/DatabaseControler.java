@@ -27,7 +27,7 @@ public class DatabaseControler {
 
     private Connection getConection() throws SQLException
     {
-        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/chilly", "ChilliUser", "Chilli321");
+        return DriverManager.getConnection("jdbc:mariadb://localhost:3306/chillyWeb", "ChilliUser", "Chilli321");
     }
 
     public int registryNewUser(String name, String password,String email,String phone)
@@ -451,7 +451,7 @@ public class DatabaseControler {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM planttype WHERE plantType_id = ?");
             ps.setString(1, String.valueOf(plantID));
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) return new Plant(Teracota.PlantTypes.values()[plantID],rs.getInt("growtimeindays"),rs.getInt("price"));
+            if(rs.next()) return new Plant(Teracota.PlantTypes.values()[plantID],rs.getInt("growtimeindays"),rs.getInt("actual_price"));
             return null;
         }
         catch (Exception e) {

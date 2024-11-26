@@ -29,9 +29,9 @@ public class PhotoController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if(isLinux) galerryPath = "\\var\\gallery";
+        if(isLinux) galerryPath = "\\home\\Chilli\\ChilliWeb\\gallery";
         else galerryPath = "C:\\gallery";
-        scriptPath = "\\home\\Chilli\\Desktop\\snap.sh";
+        scriptPath = "\\home\\Chilli\\ChilliWeb\\snap.sh";
     }
     public boolean takeSnapshot(String teracotaFolder,String fileName) {
 
