@@ -29,18 +29,19 @@ public class PhotoController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        if(isLinux) galerryPath = "\\home\\Chilli\\ChilliWeb\\gallery";
+        if(isLinux) galerryPath = "gallery";
         else galerryPath = "C:\\gallery";
-        scriptPath = "\\home\\Chilli\\ChilliWeb\\snap.sh";
+        scriptPath = "snap.sh";
     }
     public boolean takeSnapshot(String teracotaFolder,String fileName) {
 
         // Non-Windows: Use shell script to take the snapshot
         teracotaFolder = galerryPath+teracotaFolder;
-        String outputFilePath = teracotaFolder+"\\"+fileName;
+        String outputFilePath;
 
         try {
             if(!isLinux) {
+                outputFilePath = teracotaFolder+"\\"+fileName;
                 // Create a simple placeholder image
                 int width = 100; // Width of the image
                 int height = 100; // Height of the image
@@ -61,7 +62,8 @@ public class PhotoController {
                 return outputFile.exists();// Return true if the image was created
             }
             else {
-
+                teracotaFolder = teracotaFolder.replace("\\","/");
+                outputFilePath = teracotaFolder+"/"+fileName;
                 // Build the command
                 ProcessBuilder processBuilder = new ProcessBuilder(
                         "bash", scriptPath, outputFilePath
@@ -94,9 +96,17 @@ public class PhotoController {
     public ArrayList<String> getPhotos(String terracotaFolder, int n)
     {
         ArrayList<String> fileNames = new ArrayList<>();
-        String outputFilePath = galerryPath+"\\"+terracotaFolder;
+        String outputFilePath;
+        if(isLinux)
+        {
+            outputFilePath = galerryPath+"/"+terracotaFolder;
+            terracotaFolder = terracotaFolder.replace("\\","/");
+        }
+        else outputFilePath = galerryPath+"\\"+terracotaFolder;
+
         File folder = new File(outputFilePath);
         File[] listOfFiles = folder.listFiles();
+        System.out.println(listOfFiles.length);
         if(listOfFiles != null) {
             for (int i = 0; i < listOfFiles.length; i++) {
                 if (listOfFiles[i].isFile()) fileNames.add("gallery/"+terracotaFolder+"/"+listOfFiles[i].getName());
@@ -107,15 +117,19 @@ public class PhotoController {
     }
     public String getActualPhoto(int terracotaFolder)
     {
+        if(isLinux) return "gallery/"+terracotaFolder+"/custom/temp.jpg";
         return "gallery\\"+terracotaFolder+"\\custom\\temp.jpg";
     }
     public boolean createPhotoDir(String terracotaFolder)
     {
-        File theDir = new File(galerryPath+"\\"+terracotaFolder);
+        File theDir;
+        if (isLinux) theDir = new File(galerryPath+"/"+terracotaFolder);
+        else theDir = new File(galerryPath+"\\"+terracotaFolder);
         if (!theDir.exists()){
             theDir.mkdirs();
         }
-        theDir = new File(galerryPath+"\\"+terracotaFolder+"\\custom");
+        if(isLinux) theDir = new File(galerryPath+"/"+terracotaFolder+"/custom");
+        else theDir = new File(galerryPath+"\\"+terracotaFolder+"\\custom");
         if (!theDir.exists()){
             theDir.mkdirs();
         }
@@ -123,7 +137,9 @@ public class PhotoController {
     }
     public boolean deletetePhotoDir(String terracotaFolder)
     {
-        File theDir = new File(galerryPath+"\\"+terracotaFolder);
+        File theDir;
+        if(isLinux) theDir = new File(galerryPath+"/"+terracotaFolder);
+        else theDir = new File(galerryPath+"\\"+terracotaFolder);
         if (!theDir.exists()){
             theDir.delete();
         }

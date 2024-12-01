@@ -11,6 +11,7 @@ public class Coniguration implements WebMvcConfigurer
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Mapa URL /gallery/** na externí složku na disku
         registry.addResourceHandler("/gallery/**")
-                .addResourceLocations("file:/gallery/");
+                .addResourceLocations("file:/home/Chilli/ChilliWeb/gallery/");
+        System.out.println(registry.hasMappingForPattern("/gallery/**"));
     }
 }

@@ -25,8 +25,6 @@ public class TeraccotaControler {
 
     public byte[] updateData()
     {
-
-        ChiliPeperApplication.takeSnap(teracota.getId());
         try {
             byte offset = 0;
             byte[] data = new byte[4];
@@ -52,6 +50,7 @@ public class TeraccotaControler {
     }
     public void updateCron(int hour)
     {
+        if(hour==12) ChiliPeperApplication.takeSnap(teracota.getId()); //take snapshot at 12:00
         actualCron = ChiliPeperApplication.getActiveCronForTeracota(teracota.getId(),hour);
     }
     public Teracota getTeracota(){return teracota;}
