@@ -40,9 +40,14 @@ public class PLCControler
         keysToRemove.add(teracotaID);
         lock.unlock();
     }
+    public void updateCron(int teracotaID)
+    {
+        updateCron(teracotaID,LocalTime.now().getHour());
+    }
     public void updateCron(int teracotaID,int actuahour)
     {
         teraccotaControlers.get(teracotaID).updateCron(actuahour);
+        System.out.println("now");
     }
     public Teracota getActualValues(int teracotaID)
     {
@@ -98,7 +103,7 @@ public class PLCControler
             keysToRemove.clear();
             lock.unlock();
             try {
-                Thread.sleep(10000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

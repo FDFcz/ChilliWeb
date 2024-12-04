@@ -89,7 +89,7 @@ public class WebController {
         if(userID >-1)
         {
             Cookie cookie = new Cookie("UserToken",newToken);
-            cookie.setMaxAge(3600); //1h
+            //cookie.setMaxAge(3600); //1h
             response.addCookie(cookie);
             return "redirect:userHome?id="+userID;
         }
@@ -213,7 +213,7 @@ public class WebController {
                                  @RequestParam(required = false, value="light") String[] lights,
                                  @RequestParam(required = false, value="cronID") String[] cronsID,
                                  @RequestParam(required = false, value="schedlID") String[] scheduleID,
-                                 @CookieValue("UserToken") String userToken)
+                                 @CookieValue("UserToken") String userToken,Model model)
     {
         if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:403";
         if(!authorizationControler.isCustomerOwnerOfTeracota(Integer.valueOf(id),Integer.valueOf(teracota))) return "redirect:403";
@@ -224,8 +224,11 @@ public class WebController {
             {
                 Schedule updateSchedl = new Schedule(Integer.valueOf(scheduleID[i]),Float.valueOf(temps[i]),(Integer.valueOf(lights[i])>0),Integer.valueOf(humidities[i]));
                 Cron cron = new Cron(Integer.valueOf(cronsID[i]),updateSchedl,Integer.valueOf(startsTime[i]),Integer.valueOf(endsTime[i]));
-                ChiliPeperApplication.updateCron(cron);
+                ChiliPeperApplication.updateCron(cron,Integer.valueOf(teracota));
             }
+            model.addAttribute("currentTeracota", teracota);
+            //model.addAttribute("crons", crons);
+            model.addAttribute("userID", id);
             return "redirect:userHome?id="+id;
         }
     }

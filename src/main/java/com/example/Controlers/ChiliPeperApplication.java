@@ -70,7 +70,11 @@ public class ChiliPeperApplication {
 
 	//region [Cron]
 	public static void addNewCron(int teraID) {dbControler.addNewCron(teraID);}
-	public static void updateCron(Cron cron) {dbControler.updateCron(cron);}
+	public static void updateCron(Cron cron,int terraId)
+	{
+		dbControler.updateCron(cron);
+		plcControler.updateCron(terraId);
+	}
 	public static void deleteCron(int cronID){dbControler.deleteCron(cronID);}
 	public static Cron[] getActiveCrons(int currenHour){return dbControler.getActiveCrons(currenHour);}
 	public static List<Cron> getCronsForTeracota(int teraID){return dbControler.getCronsToTeracota(teraID);}

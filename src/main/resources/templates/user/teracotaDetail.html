@@ -37,23 +37,23 @@
                             th:selected="${hour == cron.startTime}"></option>
                 </select>
 
-                <label for="temp">Teplota:</label>
+                <label th:for="'temp'+${iterStat.index}">Teplota:</label>
                 <input type="range" name="temp" id="temp" min="10" max="40" step="0.5"
                        th:value="${cron.schedule.temperature}"
-                       oninput="updateTempSlider('tempValue${iterStat.index}', this.value)" />
-                <span id="tempValue${iterStat.index}" th:text="${cron.schedule.temperature}"></span>&#176;C
+                       th:oninput="${'updateTempSlider( temp' + {iterStat.index', this.value)'}"/>
+                <span th:id="'temp'+${iterStat.index}" th:text="${cron.schedule.temperature}"></span>&#176;C
 
-                <label for="humidity">Zalití:</label>
+                <label th:for="'humidity'+${iterStat.index}">Zalití:</label>
                 <input type="range" name="humidity" id="humidity" min="20" max="80" step="5"
                        th:value="${cron.schedule.humidity}"
-                       oninput="updateHumiSlider('humidityValue${iterStat.index}', this.value)" />
-                <span id="humidityValue${iterStat.index}" th:text="${cron.schedule.humidity}"></span>%
+                       oninput=|updateHumiSlider('humidity${iterStat.index}', this.value)| />
+                <span th:id="'humidity'+${iterStat.index}" th:text="${cron.schedule.humidity}"></span>%
 
-                <label for="light">Světlo:</label>
+                <label th:for="'Light'+${iterStat.index}">Světlo:</label>
                 <input type="range" name="light" id="light" min="0" max="1" step="1"
                        th:value="${cron.schedule.light ? 1 : 0}"
-                       oninput="updateLightSlider('LightValue${iterStat.index}', this.value)" />
-                <span id="LightValue${iterStat.index}" th:text="${cron.schedule.light ? 'O' : 'X'}"></span>
+                       oninput="updateLightSlider('Light${iterStat.index}', this.value)" />
+                <span th:id="'Light'+${iterStat.index}" th:text="${cron.schedule.light ? 'O' : 'X'}"></span>
 
                 <label for="end">Do kdy:</label>
                 <select name="end" id="end">
