@@ -1,15 +1,15 @@
-function updateTempSlider(elementID,value)
+function updateTempSlider(value, elementID)
 {
     value = parseInt(value).toFixed(1).toString();
     elementID.textContent = value;
     elementID.style.color = "rgb("+(20+(value*4.2))+",0,"+(180-(value*4.2))+")";
 }
-function updateHumiSlider(elementID,value)
+function updateHumiSlider(value, elementID)
 {
     elementID.textContent = value;
     elementID.style.color = "rgb(0,0,"+(50+(value*2))+")";
 }
-function updateLightSlider(elementID,value)
+function updateLightSlider(value, elementID)
 {
     if(value == "0")
     {

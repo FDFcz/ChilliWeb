@@ -297,8 +297,13 @@ public class WebController {
     }
 
     @PostMapping("/profile")
-            public String postProfile(@RequestParam String id, @RequestParam String email, @RequestParam String  tell, @CookieValue("UserToken")Model model)
+            public String postProfile(@RequestParam String id, @RequestParam String email, @RequestParam String  tell, @CookieValue("UserToken")String userToken ,Model model)
     {
+        if(!authorizationControler.isCustomerAuthorize(Integer.valueOf(id),userToken)) return "redirect:403";
+        Customer customer = ChiliPeperApplication.getUser(Integer.valueOf(id));
+        customer.setEmail(email);
+        customer.setTel(tell);
+        ChiliPeperApplication.updateUser(customer);
         return "redirect:userHome?id="+id;
     }
 

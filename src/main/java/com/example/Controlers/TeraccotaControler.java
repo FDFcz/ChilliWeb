@@ -31,7 +31,7 @@ public class TeraccotaControler {
             Schedule actualschedule = actualCron.getSchedule();
             data[0] = (byte) actualschedule.getTemperature();
             data[1] = (byte) actualschedule.getHumidity();
-            data[2] = (byte) ((actualschedule.getLight()) ? 0 : 1);
+            data[2] = (byte) ((actualschedule.getLight()) ? 1 : 0);
             data[3] = offset;
 
             data = sender.sentData(data);

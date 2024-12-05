@@ -18,9 +18,12 @@ public class Customer {
     }
     public String getUserName() {return userName;}
     public int getId() {return id;}
-    public String getName(){return userName;}
+    //public String getName(){return userName;}
     public String getEmail(){return email;}
     public String getTel(){return tel;}
+
+    public void setEmail(String email){this.email = email;}
+    public void setTel(String tel){this.tel = tel;}
 
     public void addTeracota(Teracota t) {ownedTeracotas.add(t);}
     public void removeTeracota(Teracota t) {ownedTeracotas.remove(t);}

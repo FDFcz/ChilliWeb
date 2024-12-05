@@ -66,6 +66,7 @@ public class ChiliPeperApplication {
 	public static Customer getUser(int id) {return dbControler.getUser(id);}
 	public static Customer getUserWithTeracotas(int id) {return dbControler.getUserWithTeracotas(id);}
 	public static int registryNewUser(String userName, String password,String email,String tell) {return dbControler.registryNewUser(userName, aControler.getHash(password),email,tell);}
+	public static boolean updateUser(Customer customer){return dbControler.updateUser(customer);}
 	//endregion
 
 	//region [Cron]

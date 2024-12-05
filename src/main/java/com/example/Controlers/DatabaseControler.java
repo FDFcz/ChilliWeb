@@ -45,6 +45,20 @@ public class DatabaseControler {
             throw new RuntimeException(e);
         }
     }
+    public boolean updateUser(Customer customer)
+    {
+        try(Connection connection = getConection())
+        {
+            PreparedStatement ps = connection.prepareStatement("UPDATE customer SET email=?, tell=? WHERE customer_id = ?");
+            ps.setString(1, customer.getEmail());
+            ps.setString(2, customer.getTel());
+            ps.setInt(3, customer.getId());
+            int result = ps.executeUpdate();
+            return result >0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public String[][] getAllTAble(String nameOfTable)
     {
