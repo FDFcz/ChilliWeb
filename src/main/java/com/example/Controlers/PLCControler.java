@@ -47,7 +47,6 @@ public class PLCControler
     public void updateCron(int teracotaID,int actuahour)
     {
         teraccotaControlers.get(teracotaID).updateCron(actuahour);
-        System.out.println("now");
     }
     public Teracota getActualValues(int teracotaID)
     {
@@ -66,10 +65,9 @@ public class PLCControler
             int currentHour = LocalTime.now().getHour();
             if(lastHour != currentHour)
             {
-                for(Teracota teracota : teracotasToAdd)
-                {
-                    updateCron(teracota.getId(),currentHour);
-                }
+                teraccotaControlers.forEach((k,v)-> {
+                    updateCron(k,currentHour);
+                });
                 lastHour = currentHour;
             }
             lock.unlock();
