@@ -37,6 +37,9 @@ EthernetUDP UdpForParameters, UdpForDiagnostic; // An EthernetUDP instance to le
  float setTemperature=0;
  bool setLight = false;
 
+int maxHumi=410;
+int minHumi=130;
+
  int actualHumidityPersents;
  float actulaTemperature;
  bool actualLight;
@@ -49,8 +52,8 @@ EthernetUDP UdpForParameters, UdpForDiagnostic; // An EthernetUDP instance to le
   {
   Ethernet.begin(mac, ip);   // start the Ethernet
   UdpForParameters.begin(portForParameters);   // start UDP
-  UdpForDiagnostic.begin(portForDiagnostic); 
- 
+  UdpForDiagnostic.begin(portForDiagnostic);
+
   analogReadResolution(12);//analog input resolution confiq 12=4095
 
 
@@ -58,8 +61,8 @@ EthernetUDP UdpForParameters, UdpForDiagnostic; // An EthernetUDP instance to le
    {
     pinMode(USER_LEDS[i], OUTPUT);
     pinMode(relayOutputs[i], OUTPUT);
-   } 
-   //xTaskCreate(measurement, "Task2", 100, NULL, 1, &measurementTask);  
+   }
+   //xTaskCreate(measurement, "Task2", 100, NULL, 1, &measurementTask);
    //xTaskCreate(control, "Task3", 120, NULL, 3, &controlTask);
    co2Sensor.calibrate();
  }
@@ -102,16 +105,25 @@ EthernetUDP UdpForParameters, UdpForDiagnostic; // An EthernetUDP instance to le
 void measure()
 {
 
-  
-    int humidityInput = analogRead(A1)-1230;//-1230 3v
-    if(humidityInput<0)actualHumidityPersents=0;
-    else actualHumidityPersents =100- ((100*humidityInput)/2470);
+
+    int humidityInput = analogRead(A1)-280;
+    //if(humidityInput<0)actualHumidityPersents=0;
+    //else actualHumidityPersents =(100.0*(float)((humidityInput)/(120.0))); //1V 415, 0.9V 370 100% IN DIRT min 0.8v 310, 370-280=75 %=((x)/90)
+
+    float persent = (float)(1-(humidityInput)/(90.0));
+    if(persent<0) actualHumidityPersents=0;
+    else actualHumidityPersents=100*persent;
+    if(actualHumidityPersents>100)actualHumidityPersents=100;
+
+
+    //int humidityInput = analogRead(A1);
+    //actualHumidityPersents = map(humidityInput,maxHumi,minHumi, 0, 100);
 
     int tempInput = analogRead(A0); //-40°C ,190°C = 0-4095, 0°C = 712
-    actulaTemperature = ((tempInput/409.5)*19.0)-35.0; //(hodnota/hodnota_1v)*10% => procento na vstupu,(procento na vstupu*1%z190°C) -40°c
-  
+    actulaTemperature = (float)(((float)tempInput/409.5)*19.0)-35.0; //(hodnota/hodnota_1v)*10% => procento na vstupu,(procento na vstupu*1%z190°C) -40°c
+
     ActualCO2 = co2Sensor.read();
-    
+
 
 }
 void control()
@@ -122,14 +134,14 @@ void control()
 
   //light---------
   outputsValues[1] = setLight;
-  
+
   //humidity-----------
-  if(actualHumidityPersents<setHumidityPersent && actualHumidityPersents>0) outputsValues[2] = true;
+  if(actualHumidityPersents<setHumidityPersent) outputsValues[2] = true;
   else outputsValues[2] = false;
 
   //Fan--------------
-  if (ActualCO2 > 1000 || ActualCO2 < 100) outputsValues[4] = true;
-  else outputsValues[4] = false;
+  if (ActualCO2 > 1000 || ActualCO2 < 100 || actulaTemperature > setTemperature+2) outputsValues[3] = true;
+  else outputsValues[3] = false;
 
   
   for(int i = 0;i<NUM_LEDS;i++)//--------set reles and leds
@@ -138,9 +150,3 @@ void control()
     digitalWrite(USER_LEDS[i], outputsValues[i]);
   }
 }
-
-
-
-
-
-

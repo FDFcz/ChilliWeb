@@ -106,9 +106,9 @@ public class PhotoController {
 
         File folder = new File(outputFilePath);
         File[] listOfFiles = folder.listFiles();
-        System.out.println(listOfFiles.length);
+        //System.out.println(listOfFiles.length);
         if(listOfFiles != null) {
-            for (int i = 0; i < listOfFiles.length; i++) {
+            for (int i = listOfFiles.length; i >=0; i--) {
                 if (listOfFiles[i].isFile()) fileNames.add("gallery/"+terracotaFolder+"/"+listOfFiles[i].getName());
                 if(fileNames.size() >=n)break; // return only specific number of n
             }
